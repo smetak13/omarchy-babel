@@ -11,6 +11,8 @@
   "entryPoints": {
     "barWidget": "Panel.qml"
   },
+  "license": "MIT",
+  "repository": "https://github.com/smetak13/omarchy-babel",
   "barWidget": {
     "displayName": "Babel",
     "description": "Two-column Czech and Italian translator powered by Claude",
