@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "smetak13.babel",
+  "name": "Babel",
+  "version": "0.1.0",
+  "author": "Simon Smejkal",
+  "description": "Translate between Czech and Italian with Claude, from the bar or from a selection",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Panel.qml"
+  },
+  "barWidget": {
+    "displayName": "Babel",
+    "description": "Two-column Czech and Italian translator powered by Claude",
+    "category": "Tools",
+    "allowMultiple": false,
+    "defaultSection": "right"
+  }
+}

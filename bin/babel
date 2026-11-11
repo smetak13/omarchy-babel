@@ -1,0 +1,51 @@
+#!/bin/bash
+set -euo pipefail
+
+PLUGIN_ID=smetak13.babel
+MAX_CHARS=8000
+MODEL=sonnet
+
+export PATH="$HOME/.local/share/mise/command-wrappers/bin:$HOME/.local/share/mise/shims:$HOME/.local/bin:$PATH"
+
+usage() {
+  echo "Usage: babel grab | babel translate <instructions> <schema> <text>" >&2
+  exit 1
+}
+
+has_text() {
+  [[ -n ${1//[[:space:]]/} ]]
+}
+
+selected_text() {
+  local text
+  text=$(wl-paste --primary --no-newline --type text 2>/dev/null || true)
+  has_text "$text" || text=$(wl-paste --no-newline --type text 2>/dev/null || true)
+  printf '%s' "${text:0:MAX_CHARS}"
+}
+
+grab() {
+  local text
+  text=$(selected_text)
+  omarchy-shell shell summon "$PLUGIN_ID"
+  has_text "$text" && omarchy-shell "$PLUGIN_ID" translateText "$text"
+  return 0
+}
+
+translate() {
+  (( $# == 3 )) || usage
+  printf '%s' "$3" | claude -p \
+    --model "$MODEL" \
+    --setting-sources "" \
+    --strict-mcp-config \
+    --tools "" \
+    --no-session-persistence \
+    --output-format json \
+    --system-prompt "$1" \
+    --json-schema "$2"
+}
+
+case ${1:-} in
+  grab) grab ;;
+  translate) shift; translate "$@" ;;
+  *) usage ;;
+esac
